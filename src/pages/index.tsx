@@ -120,7 +120,12 @@ export default function Home() {
         <header className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
           <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-lg sm:text-xl font-bold text-purple-600 dark:text-purple-400">Planning Pocket</h1>
+              <button
+                onClick={() => router.push('/')}
+                className="text-lg sm:text-xl font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition cursor-pointer"
+              >
+                Planning Pocket
+              </button>
               <ThemeToggle />
             </div>
           </div>

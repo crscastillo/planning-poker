@@ -210,6 +210,22 @@ export const sessionStore = {
     return session.users;
   },
 
+  async removeUser(userId: string, sessionId: string): Promise<boolean> {
+    const session = await this.getSession(sessionId);
+    if (!session) return false;
+
+    // Remove user from users array
+    session.users = session.users.filter(u => u.id !== userId);
+
+    // Remove all votes from this user across all items
+    session.items.forEach(item => {
+      item.votes = item.votes.filter(v => v.userId !== userId);
+    });
+
+    await this.updateSession(session);
+    return true;
+  },
+
   async deleteSession(sessionId: string): Promise<boolean> {
     try {
       const { error } = await supabase.storage

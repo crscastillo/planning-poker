@@ -29,6 +29,19 @@ export default function SessionPage() {
       const response = await fetch(`/api/sessions/${sessionId}`);
       if (response.ok) {
         const data = await response.json();
+        
+        // Check if current user has been kicked from the session
+        if (joined && currentUser) {
+          const userStillInSession = data.users.some((u: User) => u.id === currentUser.id);
+          if (!userStillInSession) {
+            // User has been removed from the session
+            localStorage.removeItem(`user_${sessionId}`);
+            alert('You have been removed from this session by the creator.');
+            router.push('/');
+            return;
+          }
+        }
+        
         setSession(data);
         setError('');
       } else {
@@ -40,7 +53,7 @@ export default function SessionPage() {
     } finally {
       setLoading(false);
     }
-  }, [sessionId]);
+  }, [sessionId, joined, currentUser, router]);
 
   useEffect(() => {
     // Check if user is already in localStorage
@@ -246,6 +259,37 @@ export default function SessionPage() {
     }
   };
 
+  const kickUser = async (userId: string, userName: string) => {
+    if (!sessionId || !isCreator) return;
+
+    const confirmed = confirm(
+      `Are you sure you want to remove ${userName} from this session? They will be immediately disconnected.`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const creatorId = localStorage.getItem(`session_creator_${sessionId}`);
+      
+      const response = await fetch(`/api/sessions/${sessionId}/kick`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, creatorId }),
+      });
+
+      if (response.ok) {
+        await fetchSession();
+      } else if (response.status === 403) {
+        alert('Only the session creator can remove participants');
+      } else {
+        alert('Failed to remove participant');
+      }
+    } catch (error) {
+      console.error('Error removing participant:', error);
+      alert('Failed to remove participant');
+    }
+  };
+
   const getCurrentItem = (): Item | undefined => {
     return session?.items.find(item => item.id === session.currentItemId);
   };
@@ -329,7 +373,12 @@ export default function SessionPage() {
         <header className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
           <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-lg sm:text-xl font-bold text-purple-600 dark:text-purple-400">Planning Pocket</h1>
+              <button
+                onClick={() => router.push('/')}
+                className="text-lg sm:text-xl font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition cursor-pointer"
+              >
+                Planning Pocket
+              </button>
               <div className="flex items-center gap-2 sm:gap-3">
                 <ThemeToggle />
                 <button
@@ -392,7 +441,12 @@ export default function SessionPage() {
         <header className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
           <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-lg sm:text-xl font-bold text-purple-600 dark:text-purple-400">Planning Pocket</h1>
+              <button
+                onClick={() => router.push('/')}
+                className="text-lg sm:text-xl font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition cursor-pointer"
+              >
+                Planning Pocket
+              </button>
               <div className="flex items-center gap-2 sm:gap-3">
                 <ThemeToggle />
                 <button
@@ -778,11 +832,22 @@ export default function SessionPage() {
                 <div className="px-4 pb-4 pt-2">
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                     {session?.users.map((user) => (
-                      <div key={user.id} className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                      <div key={user.id} className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg relative group">
                         <div className="w-8 h-8 bg-purple-500 dark:bg-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
                           {user.name.charAt(0).toUpperCase()}
                         </div>
-                        <span className="text-sm text-gray-700 dark:text-gray-300 truncate">{user.name}</span>
+                        <span className="text-sm text-gray-700 dark:text-gray-300 truncate flex-1">{user.name}</span>
+                        {isCreator && user.id !== currentUser?.id && (
+                          <button
+                            onClick={() => kickUser(user.id, user.name)}
+                            className="ml-auto flex-shrink-0 w-6 h-6 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 focus:opacity-100"
+                            title={`Remove ${user.name}`}
+                          >
+                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        )}
                       </div>
                     ))}
                   </div>
