@@ -60,7 +60,7 @@ export const sessionStore = {
 
     if (error) {
       console.error('Supabase Storage error creating session:', error);
-      throw new Error(`Failed to create session: ${error.message}`);
+      throw new Error(`Failed to create planning session: ${error.message}`);
     }
 
     return session;

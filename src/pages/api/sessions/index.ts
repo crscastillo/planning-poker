@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
       console.error('Error creating session:', error);
       return res.status(500).json({ 
-        error: 'Failed to create session',
+        error: 'Failed to create planning session',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
     }

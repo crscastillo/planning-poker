@@ -99,11 +99,11 @@ export default function Home() {
           alert('Failed to join session');
         }
       } else {
-        alert('Failed to create session');
+        alert('Failed to create planning session');
       }
     } catch (error) {
-      console.error('Error creating session:', error);
-      alert('Failed to create session');
+      console.error('Error creating planning session:', error);
+      alert('Failed to create planning session');
     } finally {
       setLoading(false);
     }
@@ -112,7 +112,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Planning Poker</title>
+        <title>Planning Pocket</title>
         <meta name="description" content="Agile planning poker for distributed teams" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -134,7 +134,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
           <div className="text-center mb-6 sm:mb-8">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-              Planning Poker
+              Planning Pocket
             </h2>
             <p className="text-gray-600 dark:text-gray-400">
               Estimate your stories with your team
@@ -223,7 +223,7 @@ export default function Home() {
                   disabled={loading}
                   className="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px]"
                 >
-                  {loading ? 'Creating...' : 'Create Session'}
+                  {loading ? 'Creating...' : 'Create Planning Session'}
                 </button>
               </form>
 

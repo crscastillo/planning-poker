@@ -1,103 +1,62 @@
 # Planning Poker
 
-A simple, real-time planning poker application built with Next.js and deployed on Vercel.
+A real-time planning poker application for agile teams to collaboratively estimate stories and tasks.
 
-## Features
+## ✨ Features
 
-- 🎯 Create planning poker sessions
-- 📝 Add items to estimate
-- 🔗 Share session links with your team
-- 🎴 Vote using Fibonacci cards (0, 1, 2, 3, 5, 8, 13, 21, 34, ?)
-- 👥 See who has voted in real-time
-- 🎭 Reveal votes simultaneously
-- ⏱️ Sessions automatically expire after 4 hours
-- 💾 Persistent storage using Supabase Storage (JSON objects)
-- 🔒 Session creator has exclusive control over reveal/reset/estimate actions
+- 🎯 **Create Planning Sessions** - Start a planning session in seconds
+- 🔗 **Share Links** - Invite your team with a simple URL
+- 🎴 **Fibonacci Voting** - Standard agile estimation cards (0, 1, 2, 3, 5, 8, 13, 21, 34, ?)
+- 👥 **Real-time Updates** - See who has voted as it happens
+- 🎭 **Simultaneous Reveal** - All votes revealed at once for unbiased estimation
+- 📊 **Vote Statistics** - View distribution and suggested estimates
+- 🌙 **Dark Mode** - Easy on the eyes during long sessions
+- 📱 **Mobile Friendly** - Works great on phones and tablets
+- ⏱️ **Auto-Expiry** - Sessions automatically clean up after 4 hours
+- 👑 **Session Control** - Creators can manage items and participants
 
-## Getting Started
+## 🚀 How to Use
 
-### Prerequisites
+### For Session Creators:
 
-- Node.js 18+ installed
-- npm or yarn
+1. **Create a Session** - Enter a session name on the home page
+2. **Share the Link** - Copy and share the session URL with your team
+3. **Add Items** - Create stories/tasks that need estimation
+4. **Select an Item** - Click on an item to make it active for voting
+5. **Wait for Votes** - Watch as team members submit their estimates
+6. **Reveal Votes** - Click "Reveal Votes" to show everyone's estimates
+7. **Set Final Estimate** - Choose the agreed-upon estimate
+8. **Manage Team** - Remove participants if needed (hover over participant to see remove button)
 
-### Installation
+### For Participants:
 
-1. Clone the repository:
-```bash
-git clone <your-repo-url>
-cd planning-poker
-```
+1. **Join the Session** - Click the shared link and enter your name
+2. **Wait for Item** - The session creator will select an item to estimate
+3. **Vote** - Choose your estimate from the Fibonacci cards
+4. **Wait for Reveal** - Your vote is hidden until everyone votes
+5. **Discuss** - See all votes and discuss if there are differences
+6. **Repeat** - Move to the next item
 
-2. Install dependencies:
-```bash
-npm install
-```
+## 🎮 Live Demo
 
-3. Set up Supabase Storage:
-   - Follow the instructions in [SUPABASE_STORAGE_SETUP.md](SUPABASE_STORAGE_SETUP.md)
-   - Create a `.env.local` file with your Supabase credentials
+Try it out: [Planning Poker Demo](https://your-app-url.vercel.app)
 
-4. Test your setup:
-   - Start dev server: `npm run dev`
-   - Visit http://localhost:3000/api/test-supabase to verify Storage setup
+## 🛠️ Developer Setup
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser
+Want to run your own instance or contribute? Check out the [SETUP.md](SETUP.md) for technical details and installation instructions.
 
-## Usage
+## 📝 License
 
-1. **Create a Session**: Enter a session name on the home page
-2. **Share the Link**: Copy the session URL and share it with your team
-3. **Join**: Each participant enters their name to join
-4. **Add Items**: Create items/stories that need to be estimated
-5. **Select an Item**: Click on an item to make it active for voting
-6. **Vote**: Each participant selects their estimate using the Fibonacci cards
-7. **Reveal**: Once everyone has voted, click "Reveal Votes" to see all estimates
-8. **Set Final Estimate**: Choose the final estimate for the item
-9. **Repeat**: Move to the next item and continue
+MIT License - feel free to use this for your team!
 
-## Deployment
+## 👨‍💻 Author
 
-### Deploy to Vercel
+Created by Carlos Castillo
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/planning-poker)
+---
 
-Or manually:
+*Perfect for remote teams doing sprint planning, backlog refinement, or any collaborative estimation activity.*
 
-1. Install Vercel CLI:
-```bash
-npm i -g vercel
-```
-
-2. Deploy:
-```bash
-vercel
-```
-
-3. Follow the prompts to deploy your application
-
-## Tech Stack
-
-- **Framework**: Next.js 14
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Storage**: Supabase Storage (JSON objects)
-- **Deployment**: Vercel
-
-## Architecture
-
-The application uses Supabase Storage for persistence:
-
-- Sessions are stored as JSON files in a Supabase Storage bucket
-- Each session is a single JSON object: `{sessionId}.json`
-- Polling (every 2 seconds) is used to sync state across clients
-- Automatic cleanup of expired sessions (4-hour TTL)
-- No relational database - pure object storage
-
-## Limitations
-
-- Sessions expire after 4 hours
-- Polling-based updates (2-second intervals)
 - Requires Supabase project with Storage bucket configured
 
 ## Future Enhancements
