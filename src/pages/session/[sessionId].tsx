@@ -20,6 +20,7 @@ export default function SessionPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isCreator, setIsCreator] = useState(false);
+  const [participantsExpanded, setParticipantsExpanded] = useState(false);
 
   const fetchSession = useCallback(async () => {
     if (!sessionId || typeof sessionId !== 'string') return;
@@ -495,7 +496,41 @@ export default function SessionPage() {
                   </p>
                 )}
 
-                <div className="space-y-2 max-h-96 overflow-y-auto">
+                {/* Mobile: Tag-based compact view */}
+                <div className="lg:hidden">
+                  {session && session.items.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {session.items.map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => isCreator && handleSetCurrentItem(item.id)}
+                          disabled={!isCreator}
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                            isCreator ? 'cursor-pointer active:scale-95' : 'cursor-default'
+                          } ${
+                            session.currentItemId === item.id
+                              ? 'bg-purple-600 text-white shadow-md'
+                              : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600'
+                          }`}
+                        >
+                          <span className="truncate max-w-[120px]">{item.title}</span>
+                          {item.finalEstimate && (
+                            <span className="px-1.5 py-0.5 bg-green-500 text-white text-xs font-bold rounded">
+                              {item.finalEstimate}
+                            </span>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">
+                      No items yet. Add one to start!
+                    </p>
+                  )}
+                </div>
+
+                {/* Desktop: Card-based view */}
+                <div className="hidden lg:block space-y-2 max-h-96 overflow-y-auto">
                   {session?.items.map((item) => (
                     <div
                       key={item.id}
@@ -528,23 +563,6 @@ export default function SessionPage() {
                       No items yet. Add one to start!
                     </p>
                   )}
-                </div>
-              </div>
-
-              {/* Participants */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6 mt-4 sm:mt-6">
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
-                  Participants ({session?.users.length || 0})
-                </h2>
-                <div className="space-y-2">
-                  {session?.users.map((user) => (
-                    <div key={user.id} className="flex items-center space-x-2">
-                      <div className="w-8 h-8 bg-purple-500 dark:bg-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                        {user.name.charAt(0).toUpperCase()}
-                      </div>
-                      <span className="text-sm text-gray-700 dark:text-gray-300">{user.name}</span>
-                    </div>
-                  ))}
                 </div>
               </div>
             </div>
@@ -725,6 +743,49 @@ export default function SessionPage() {
                   <p className="text-gray-500 dark:text-gray-400">
                     Add an item and select it to start voting
                   </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Participants - Moved to bottom, collapsible */}
+          <div className="mt-4 sm:mt-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md">
+              <button
+                onClick={() => setParticipantsExpanded(!participantsExpanded)}
+                className="w-full p-4 flex items-center justify-between text-left hover:bg-gray-50 dark:hover:bg-gray-750 transition rounded-lg min-h-[56px]"
+              >
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                  <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+                    Participants ({session?.users.length || 0})
+                  </h2>
+                </div>
+                <svg
+                  className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform ${
+                    participantsExpanded ? 'rotate-180' : ''
+                  }`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {participantsExpanded && (
+                <div className="px-4 pb-4 pt-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                    {session?.users.map((user) => (
+                      <div key={user.id} className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div className="w-8 h-8 bg-purple-500 dark:bg-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
+                          {user.name.charAt(0).toUpperCase()}
+                        </div>
+                        <span className="text-sm text-gray-700 dark:text-gray-300 truncate">{user.name}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
