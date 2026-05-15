@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import type { Session, Item, User } from '@/lib/store';
@@ -21,6 +21,19 @@ export default function SessionPage() {
   const [error, setError] = useState('');
   const [isCreator, setIsCreator] = useState(false);
   const [participantsExpanded, setParticipantsExpanded] = useState(false);
+  
+  // Use ref to track current user without causing re-renders
+  const currentUserRef = useRef<User | null>(null);
+  const joinedRef = useRef(false);
+
+  // Sync refs with state
+  useEffect(() => {
+    currentUserRef.current = currentUser;
+  }, [currentUser]);
+
+  useEffect(() => {
+    joinedRef.current = joined;
+  }, [joined]);
 
   const fetchSession = useCallback(async () => {
     if (!sessionId || typeof sessionId !== 'string') return;
@@ -31,8 +44,8 @@ export default function SessionPage() {
         const data = await response.json();
         
         // Check if current user has been kicked from the session
-        if (joined && currentUser) {
-          const userStillInSession = data.users.some((u: User) => u.id === currentUser.id);
+        if (joinedRef.current && currentUserRef.current) {
+          const userStillInSession = data.users.some((u: User) => u.id === currentUserRef.current!.id);
           if (!userStillInSession) {
             // User has been removed from the session
             localStorage.removeItem(`user_${sessionId}`);
@@ -53,7 +66,7 @@ export default function SessionPage() {
     } finally {
       setLoading(false);
     }
-  }, [sessionId, joined, currentUser, router]);
+  }, [sessionId, router]);
 
   useEffect(() => {
     // Check if user is already in localStorage
