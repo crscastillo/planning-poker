@@ -241,6 +241,24 @@ export default function SessionPage() {
 
   const suggestedEstimate = currentItem ? getSuggestedEstimate(currentItem) : null;
 
+  // Get creator name
+  const getCreatorName = (): string => {
+    if (!session?.createdBy) return 'Unknown';
+    const creator = session.users.find(u => u.id === session.createdBy);
+    return creator?.name || 'Unknown';
+  };
+
+  // Format expiry time
+  const getExpiryTime = (): string => {
+    if (!session) return '';
+    const expiryDate = new Date(session.expiresAt);
+    return expiryDate.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      hour12: true 
+    });
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -271,11 +289,17 @@ export default function SessionPage() {
         <Head>
           <title>Join Session - Planning Poker</title>
         </Head>
-        <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center p-4">
+        <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100">
+        <header className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+            <h1 className="text-xl font-bold text-purple-600">Planning Pocket</h1>
+          </div>
+        </header>
+        <div className="flex items-center justify-center p-4 min-h-[calc(100vh-64px)]">
           <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            <h2 className="text-3xl font-bold text-gray-800 mb-2">
               {session?.name}
-            </h1>
+            </h2>
             <p className="text-gray-600 mb-6">Enter your name to join</p>
 
             <form onSubmit={handleJoinSession} className="space-y-4">
@@ -302,7 +326,8 @@ export default function SessionPage() {
               </button>
             </form>
           </div>
-        </main>
+        </div>
+      </main>
       </>
     );
   }
@@ -313,12 +338,18 @@ export default function SessionPage() {
         <title>{session?.name} - Planning Poker</title>
       </Head>
       <main className="min-h-screen bg-gray-50">
-        {/* Header */}
+        {/* Top Header */}
+        <header className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+            <h1 className="text-xl font-bold text-purple-600">Planning Pocket</h1>
+          </div>
+        </header>
+        {/* Session Header */}
         <div className="bg-white shadow-sm border-b">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{session?.name}</h1>
+                <h2 className="text-2xl font-bold text-gray-900">{session?.name}</h2>
                 <p className="text-sm text-gray-500">
                   Welcome, {currentUser?.name}
                 </p>
@@ -329,6 +360,27 @@ export default function SessionPage() {
               >
                 Copy Invite Link
               </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Session Info Banner */}
+        <div className="bg-purple-50 border-b border-purple-200">
+          <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+            <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-700">
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span>Created by <span className="font-semibold text-purple-700">{getCreatorName()}</span></span>
+              </div>
+              <span className="text-gray-400">•</span>
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Expires at <span className="font-semibold text-purple-700">{getExpiryTime()}</span></span>
+              </div>
             </div>
           </div>
         </div>
@@ -598,6 +650,11 @@ export default function SessionPage() {
             </div>
           </div>
         </div>
+        <footer className="mt-8 text-center pb-4">
+          <p className="text-sm text-gray-600">
+            Developed by <span className="font-semibold text-purple-600">Carlos Castillo</span>
+          </p>
+        </footer>
       </main>
     </>
   );

@@ -43,12 +43,18 @@ export default function Home() {
         <meta name="description" content="Agile planning poker for distributed teams" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100">
+        <header className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+            <h1 className="text-xl font-bold text-purple-600">Planning Pocket</h1>
+          </div>
+        </header>
+        <div className="flex items-center justify-center p-4 min-h-[calc(100vh-64px)]">
+          <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-800 mb-2">
+            <h2 className="text-4xl font-bold text-gray-800 mb-2">
               Planning Poker
-            </h1>
+            </h2>
             <p className="text-gray-600">
               Estimate your stories with your team
             </p>
@@ -84,6 +90,12 @@ export default function Home() {
               Sessions expire after 4 hours
             </p>
           </div>
+        </div>
+        <footer className="mt-8 text-center pb-4">
+          <p className="text-sm text-gray-600">
+            Developed by <span className="font-semibold text-purple-600">Carlos Castillo</span>
+          </p>
+        </footer>
         </div>
       </main>
     </>
