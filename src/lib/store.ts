@@ -29,25 +29,43 @@ export interface User {
   sessionId: string;
 }
 
-// In-memory storage
-const sessions = new Map<string, Session>();
-const users = new Map<string, User>();
+// Use global to prevent re-initialization during hot reloads in development
+declare global {
+  var planningPokerSessions: Map<string, Session> | undefined;
+  var planningPokerUsers: Map<string, User> | undefined;
+  var planningPokerCleanupInterval: NodeJS.Timeout | undefined;
+}
 
-// Cleanup expired sessions every 5 minutes
-setInterval(() => {
-  const now = Date.now();
-  for (const [sessionId, session] of sessions.entries()) {
-    if (session.expiresAt < now) {
-      sessions.delete(sessionId);
-      // Clean up users in this session
-      for (const [userId, user] of users.entries()) {
-        if (user.sessionId === sessionId) {
-          users.delete(userId);
+// In-memory storage - persist across hot reloads
+const sessions = global.planningPokerSessions || new Map<string, Session>();
+const users = global.planningPokerUsers || new Map<string, User>();
+
+if (process.env.NODE_ENV !== 'production') {
+  global.planningPokerSessions = sessions;
+  global.planningPokerUsers = users;
+}
+
+// Cleanup expired sessions every 5 minutes (only set up once)
+if (!global.planningPokerCleanupInterval) {
+  const cleanupInterval = setInterval(() => {
+    const now = Date.now();
+    for (const [sessionId, session] of sessions.entries()) {
+      if (session.expiresAt < now) {
+        sessions.delete(sessionId);
+        // Clean up users in this session
+        for (const [userId, user] of users.entries()) {
+          if (user.sessionId === sessionId) {
+            users.delete(userId);
+          }
         }
       }
     }
+  }, 5 * 60 * 1000);
+
+  if (process.env.NODE_ENV !== 'production') {
+    global.planningPokerCleanupInterval = cleanupInterval;
   }
-}, 5 * 60 * 1000);
+}
 
 export const sessionStore = {
   createSession(id: string, name: string): Session {
