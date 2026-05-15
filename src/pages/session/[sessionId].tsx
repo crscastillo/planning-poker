@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import type { Session, Item, User } from '@/lib/store';
+import ThemeToggle from '@/components/ThemeToggle';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const FIBONACCI_VALUES = ['0', '1', '2', '3', '5', '8', '13', '21', '34', '?'];
 
@@ -295,20 +297,20 @@ export default function SessionPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-xl text-gray-600">Loading...</div>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-xl text-gray-600 dark:text-gray-400">Loading...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-xl text-red-600 mb-4">{error}</div>
+          <div className="text-xl text-red-600 dark:text-red-400 mb-4">{error}</div>
           <button
             onClick={() => router.push('/')}
-            className="text-purple-600 hover:text-purple-700"
+            className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300"
           >
             Go back home
           </button>
@@ -323,33 +325,36 @@ export default function SessionPage() {
         <Head>
           <title>Join Session - Planning Poker</title>
         </Head>
-        <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100">
-        <header className="bg-white shadow-sm border-b">
+        <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 dark:from-gray-900 dark:to-gray-800">
+        <header className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
           <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-xl font-bold text-purple-600">Planning Pocket</h1>
-              <button
-                onClick={() => router.push('/')}
-                className="text-sm text-gray-600 hover:text-purple-600 flex items-center gap-1 transition"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                Home
-              </button>
+              <h1 className="text-xl font-bold text-purple-600 dark:text-purple-400">Planning Pocket</h1>
+              <div className="flex items-center gap-3">
+                <ThemeToggle />
+                <button
+                  onClick={() => router.push('/')}
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 flex items-center gap-1 transition"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                  Home
+                </button>
+              </div>
             </div>
           </div>
         </header>
         <div className="flex items-center justify-center p-4 min-h-[calc(100vh-64px)]">
-          <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">
+          <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
               {session?.name}
             </h2>
-            <p className="text-gray-600 mb-6">Enter your name to join</p>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">Enter your name to join</p>
 
             <form onSubmit={handleJoinSession} className="space-y-4">
               <div>
-                <label htmlFor="userName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="userName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Your Name
                 </label>
                 <input
@@ -358,14 +363,14 @@ export default function SessionPage() {
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                   placeholder="John Doe"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
                   required
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
+                className="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
               >
                 Join Session
               </button>
@@ -382,15 +387,17 @@ export default function SessionPage() {
       <Head>
         <title>{session?.name} - Planning Poker</title>
       </Head>
-      <main className="min-h-screen bg-gray-50">
+      <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Top Header */}
-        <header className="bg-white shadow-sm border-b">
+        <header className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
           <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-xl font-bold text-purple-600">Planning Pocket</h1>
-              <button
-                onClick={() => router.push('/')}
-                className="text-sm text-gray-600 hover:text-purple-600 flex items-center gap-1 transition"
+              <h1 className="text-xl font-bold text-purple-600 dark:text-purple-400">Planning Pocket</h1>
+              <div className="flex items-center gap-3">
+                <ThemeToggle />
+                <button
+                  onClick={() => router.push('/')}
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 flex items-center gap-1 transition"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -401,19 +408,19 @@ export default function SessionPage() {
           </div>
         </header>
         {/* Session Header */}
-        <div className="bg-white shadow-sm border-b">
+        <div className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">{session?.name}</h2>
-                <p className="text-sm text-gray-500">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{session?.name}</h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Welcome, {currentUser?.name}
                 </p>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={copyInviteLink}
-                  className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+                  className="bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
                 >
                   Copy Invite Link
                 </button>
@@ -435,14 +442,14 @@ export default function SessionPage() {
         </div>
 
         {/* Session Info Banner */}
-        <div className="bg-purple-50 border-b border-purple-200">
+        <div className="bg-purple-50 dark:bg-gray-700 border-b border-purple-200 dark:border-gray-600">
           <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-700">
+            <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-700 dark:text-gray-300">
               <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>Planning session expires at <span className="font-semibold text-purple-700">{getExpiryTime()}</span></span>
+                <span>Planning session expires at <span className="font-semibold text-purple-700 dark:text-purple-300">{getExpiryTime()}</span></span>
               </div>
             </div>
           </div>
