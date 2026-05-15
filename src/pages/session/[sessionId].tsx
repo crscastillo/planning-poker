@@ -326,14 +326,14 @@ export default function SessionPage() {
         </Head>
         <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 dark:from-gray-900 dark:to-gray-800">
         <header className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
-          <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-xl font-bold text-purple-600 dark:text-purple-400">Planning Pocket</h1>
-              <div className="flex items-center gap-3">
+              <h1 className="text-lg sm:text-xl font-bold text-purple-600 dark:text-purple-400">Planning Pocket</h1>
+              <div className="flex items-center gap-2 sm:gap-3">
                 <ThemeToggle />
                 <button
                   onClick={() => router.push('/')}
-                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 flex items-center gap-1 transition"
+                  className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 flex items-center gap-1 transition p-2"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -344,12 +344,12 @@ export default function SessionPage() {
             </div>
           </div>
         </header>
-        <div className="flex items-center justify-center p-4 min-h-[calc(100vh-64px)]">
-          <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+        <div className="flex items-center justify-center p-3 sm:p-4 min-h-[calc(100vh-64px)]">
+          <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
               {session?.name}
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">Enter your name to join</p>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-6">Enter your name to join</p>
 
             <form onSubmit={handleJoinSession} className="space-y-4">
               <div>
@@ -362,14 +362,14 @@ export default function SessionPage() {
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                   placeholder="John Doe"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition min-h-[44px]"
                   required
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
+                className="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 min-h-[48px]"
               >
                 Join Session
               </button>
@@ -389,14 +389,14 @@ export default function SessionPage() {
       <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
         {/* Top Header */}
         <header className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
-          <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-xl font-bold text-purple-600 dark:text-purple-400">Planning Pocket</h1>
-              <div className="flex items-center gap-3">
+              <h1 className="text-lg sm:text-xl font-bold text-purple-600 dark:text-purple-400">Planning Pocket</h1>
+              <div className="flex items-center gap-2 sm:gap-3">
                 <ThemeToggle />
                 <button
                   onClick={() => router.push('/')}
-                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 flex items-center gap-1 transition"
+                  className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 flex items-center gap-1 transition p-2"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -409,31 +409,33 @@ export default function SessionPage() {
         </header>
         {/* Session Header */}
         <div className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
-          <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{session?.name}</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+              <div className="flex-1 min-w-0">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 truncate">{session?.name}</h2>
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                   Welcome, {currentUser?.name}
                 </p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-shrink-0">
                 <button
                   onClick={copyInviteLink}
-                  className="bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+                  className="bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition whitespace-nowrap min-h-[44px]"
                 >
-                  Copy Invite Link
+                  <span className="hidden sm:inline">Copy Invite Link</span>
+                  <span className="sm:hidden">Invite</span>
                 </button>
                 {isCreator && (
                   <button
                     onClick={deleteSession}
-                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2"
+                    className="bg-red-600 hover:bg-red-700 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition flex items-center gap-1 sm:gap-2 min-h-[44px]"
                     title="Delete session"
                   >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
-                    Delete Session
+                    <span className="hidden sm:inline">Delete Session</span>
+                    <span className="sm:hidden">Delete</span>
                   </button>
                 )}
               </div>
@@ -443,8 +445,8 @@ export default function SessionPage() {
 
         {/* Session Info Banner */}
         <div className="bg-purple-50 dark:bg-gray-700 border-b border-purple-200 dark:border-gray-600">
-          <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-700 dark:text-gray-300">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3 sm:px-6 lg:px-8">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
               <div className="flex items-center gap-2">
                 <svg className="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -455,32 +457,32 @@ export default function SessionPage() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {/* Left Column - Items List */}
             <div className="lg:col-span-1">
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6">
                 <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">Items</h2>
                 
                 {isCreator && (
-                  <form onSubmit={handleAddItem} className="mb-6 space-y-3">
+                  <form onSubmit={handleAddItem} className="mb-4 sm:mb-6 space-y-3">
                     <input
                       type="text"
                       value={newItemTitle}
                       onChange={(e) => setNewItemTitle(e.target.value)}
                       placeholder="Item title"
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+                      className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none min-h-[44px]"
                     />
                     <textarea
                       value={newItemDescription}
                       onChange={(e) => setNewItemDescription(e.target.value)}
                       placeholder="Description (optional)"
                       rows={2}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+                      className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
                     />
                     <button
                       type="submit"
-                      className="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium transition"
+                      className="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white px-4 py-3 rounded-md text-sm font-medium transition min-h-[44px]"
                     >
                       Add Item
                     </button>
@@ -530,7 +532,7 @@ export default function SessionPage() {
               </div>
 
               {/* Participants */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6 mt-4 sm:mt-6">
                 <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
                   Participants ({session?.users.length || 0})
                 </h2>
@@ -550,28 +552,28 @@ export default function SessionPage() {
             {/* Right Column - Voting Area */}
             <div className="lg:col-span-2">
               {currentItem ? (
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
-                  <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6 lg:p-8">
+                  <div className="mb-4 sm:mb-6">
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                       {currentItem.title}
                     </h2>
                     {currentItem.description && (
-                      <p className="text-gray-600 dark:text-gray-400">{currentItem.description}</p>
+                      <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">{currentItem.description}</p>
                     )}
                   </div>
 
                   {/* Voting Cards */}
                   {!currentItem.revealed && (
-                    <div className="mb-8">
-                      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
+                    <div className="mb-6 sm:mb-8">
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3 sm:mb-4">
                         Choose your estimate
                       </h3>
-                      <div className="grid grid-cols-5 gap-4">
+                      <div className="grid grid-cols-5 sm:grid-cols-5 gap-2 sm:gap-3 lg:gap-4">
                         {FIBONACCI_VALUES.map((value) => (
                           <button
                             key={value}
                             onClick={() => handleVote(currentItem.id, value)}
-                            className={`aspect-[3/4] rounded-xl border-2 font-bold text-2xl transition-all transform hover:scale-105 ${
+                            className={`aspect-[3/4] rounded-lg sm:rounded-xl border-2 font-bold text-xl sm:text-2xl transition-all transform active:scale-95 sm:hover:scale-105 min-h-[60px] ${
                               userVote?.value === value
                                 ? 'bg-purple-600 text-white border-purple-600 shadow-lg'
                                 : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:border-purple-400 dark:hover:border-purple-500'
@@ -585,17 +587,17 @@ export default function SessionPage() {
                   )}
 
                   {/* Voting Status */}
-                  <div className="mb-6">
-                    <div className="flex justify-between items-center mb-3">
-                      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+                  <div className="mb-4 sm:mb-6">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0 mb-3">
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100">
                         Votes ({currentItem.votes.length}/{session?.users.length || 0})
                       </h3>
                       {isCreator && (
-                        <div className="space-x-2">
+                        <div className="flex gap-2">
                           {!currentItem.revealed && currentItem.votes.length > 0 && (
                             <button
                               onClick={() => handleRevealVotes(currentItem.id)}
-                              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+                              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition min-h-[44px] flex-1 sm:flex-initial"
                             >
                               Reveal Votes
                             </button>
@@ -603,7 +605,7 @@ export default function SessionPage() {
                           {currentItem.revealed && (
                             <button
                               onClick={() => handleResetVotes(currentItem.id)}
-                              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+                              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition min-h-[44px] flex-1 sm:flex-initial"
                             >
                               Reset Votes
                             </button>
@@ -675,12 +677,12 @@ export default function SessionPage() {
                           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Set Final Estimate
                           </label>
-                          <div className="flex gap-2">
+                          <div className="grid grid-cols-5 sm:flex gap-2">
                             {FIBONACCI_VALUES.map((value) => (
                               <button
                                 key={value}
                                 onClick={() => handleSetEstimate(currentItem.id, value)}
-                                className="px-4 py-2 bg-white dark:bg-gray-600 border-2 border-purple-300 dark:border-purple-500 text-purple-700 dark:text-purple-300 rounded-lg hover:bg-purple-600 hover:text-white dark:hover:bg-purple-500 font-semibold transition"
+                                className="px-3 sm:px-4 py-2 bg-white dark:bg-gray-600 border-2 border-purple-300 dark:border-purple-500 text-purple-700 dark:text-purple-300 rounded-lg hover:bg-purple-600 hover:text-white dark:hover:bg-purple-500 font-semibold transition min-h-[44px]"
                               >
                                 {value}
                               </button>
@@ -701,7 +703,7 @@ export default function SessionPage() {
                   )}
                 </div>
               ) : (
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 sm:p-12 text-center">
                   <div className="text-gray-400 dark:text-gray-500 mb-4">
                     <svg
                       className="mx-auto h-24 w-24"

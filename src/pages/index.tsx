@@ -118,17 +118,17 @@ export default function Home() {
       </Head>
       <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 dark:from-gray-900 dark:to-gray-800">
         <header className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
-          <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between">
-              <h1 className="text-xl font-bold text-purple-600 dark:text-purple-400">Planning Pocket</h1>
+              <h1 className="text-lg sm:text-xl font-bold text-purple-600 dark:text-purple-400">Planning Pocket</h1>
               <ThemeToggle />
             </div>
           </div>
         </header>
         
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="text-center mb-8">
-            <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">
               Planning Poker
             </h2>
             <p className="text-gray-600 dark:text-gray-400">
@@ -136,10 +136,10 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             {/* My Active Sessions */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-              <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">My Active Sessions</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">My Active Sessions</h3>
               
               {loadingSessions ? (
                 <div className="text-center py-8 text-gray-500 dark:text-gray-400">Loading...</div>
@@ -157,11 +157,11 @@ export default function Home() {
                     <button
                       key={session.id}
                       onClick={() => router.push(`/session/${session.id}`)}
-                      className="w-full text-left p-4 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700 rounded-lg hover:border-purple-300 dark:hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-gray-600 transition"
+                      className="w-full text-left p-3 sm:p-4 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700 rounded-lg hover:border-purple-300 dark:hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-gray-600 transition min-h-[60px]"
                     >
                       <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-semibold text-gray-900 dark:text-gray-100">{session.name}</h4>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                        <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm sm:text-base">{session.name}</h4>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 ml-2 flex-shrink-0">
                           {new Date(session.expiresAt).toLocaleTimeString('en-US', { 
                             hour: 'numeric', 
                             minute: '2-digit' 
@@ -180,8 +180,8 @@ export default function Home() {
             </div>
 
             {/* Create New Session */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-              <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">Create New Session</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">Create New Session</h3>
               
               <form onSubmit={handleCreateSession} className="space-y-4">
                 <div>
@@ -194,7 +194,7 @@ export default function Home() {
                     value={creatorName}
                     onChange={(e) => setCreatorName(e.target.value)}
                     placeholder="John Doe"
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition min-h-[44px]"
                     required
                   />
                 </div>
@@ -208,7 +208,7 @@ export default function Home() {
                     value={sessionName}
                     onChange={(e) => setSessionName(e.target.value)}
                     placeholder="Sprint 24 Planning"
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition min-h-[44px]"
                     required
                   />
                 </div>
@@ -216,7 +216,7 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px]"
                 >
                   {loading ? 'Creating...' : 'Create Session'}
                 </button>
@@ -230,8 +230,8 @@ export default function Home() {
             </div>
           </div>
 
-          <footer className="mt-12 text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+          <footer className="mt-8 sm:mt-12 text-center pb-4">
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
               Developed by <span className="font-semibold text-purple-600 dark:text-purple-400">Carlos Castillo</span>
             </p>
           </footer>
