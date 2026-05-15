@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method === 'POST') {
-    const { name } = req.body;
+    const { name, userId: providedUserId } = req.body;
 
     if (!name || typeof name !== 'string') {
       return res.status(400).json({ error: 'User name is required' });
@@ -21,7 +21,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ error: 'Session not found or expired' });
     }
 
-    const userId = uuidv4();
+    // Use provided userId if available (for creator), otherwise generate new one
+    const userId = providedUserId && typeof providedUserId === 'string' ? providedUserId : uuidv4();
     const user: User = {
       id: userId,
       name,

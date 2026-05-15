@@ -203,4 +203,22 @@ export const sessionStore = {
     
     return session.users;
   },
+
+  async deleteSession(sessionId: string): Promise<boolean> {
+    try {
+      const { error } = await supabase.storage
+        .from(BUCKET_NAME)
+        .remove([`${sessionId}.json`]);
+
+      if (error) {
+        console.error('Error deleting session:', error);
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error deleting session:', error);
+      return false;
+    }
+  },
 };

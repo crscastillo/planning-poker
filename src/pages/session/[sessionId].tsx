@@ -203,6 +203,32 @@ export default function SessionPage() {
     alert('Invite link copied to clipboard!');
   };
 
+  const deleteSession = async () => {
+    if (!sessionId || !isCreator) return;
+
+    const confirmed = confirm(
+      'Are you sure you want to delete this session? This action cannot be undone and all data will be permanently erased.'
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch(`/api/sessions/${sessionId}/delete`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        alert('Session deleted successfully');
+        router.push('/');
+      } else {
+        alert('Failed to delete session');
+      }
+    } catch (error) {
+      console.error('Error deleting session:', error);
+      alert('Failed to delete session');
+    }
+  };
+
   const getCurrentItem = (): Item | undefined => {
     return session?.items.find(item => item.id === session.currentItemId);
   };
@@ -292,7 +318,18 @@ export default function SessionPage() {
         <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100">
         <header className="bg-white shadow-sm border-b">
           <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-            <h1 className="text-xl font-bold text-purple-600">Planning Pocket</h1>
+            <div className="flex items-center justify-between">
+              <h1 className="text-xl font-bold text-purple-600">Planning Pocket</h1>
+              <button
+                onClick={() => router.push('/')}
+                className="text-sm text-gray-600 hover:text-purple-600 flex items-center gap-1 transition"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Home
+              </button>
+            </div>
           </div>
         </header>
         <div className="flex items-center justify-center p-4 min-h-[calc(100vh-64px)]">
@@ -341,7 +378,18 @@ export default function SessionPage() {
         {/* Top Header */}
         <header className="bg-white shadow-sm border-b">
           <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-            <h1 className="text-xl font-bold text-purple-600">Planning Pocket</h1>
+            <div className="flex items-center justify-between">
+              <h1 className="text-xl font-bold text-purple-600">Planning Pocket</h1>
+              <button
+                onClick={() => router.push('/')}
+                className="text-sm text-gray-600 hover:text-purple-600 flex items-center gap-1 transition"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Home
+              </button>
+            </div>
           </div>
         </header>
         {/* Session Header */}
@@ -354,12 +402,26 @@ export default function SessionPage() {
                   Welcome, {currentUser?.name}
                 </p>
               </div>
-              <button
-                onClick={copyInviteLink}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
-              >
-                Copy Invite Link
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={copyInviteLink}
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+                >
+                  Copy Invite Link
+                </button>
+                {isCreator && (
+                  <button
+                    onClick={deleteSession}
+                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2"
+                    title="Delete session"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Delete Session
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
