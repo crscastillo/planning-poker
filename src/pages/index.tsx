@@ -91,8 +91,14 @@ export default function Home() {
           const data = await joinResponse.json();
           // Store user info in localStorage
           localStorage.setItem(`user_${session.id}`, JSON.stringify(data.user));
+          // Add small delay to ensure Supabase storage is updated
+          await new Promise(resolve => setTimeout(resolve, 500));
           router.push(`/session/${session.id}`);
+        } else {
+          alert('Failed to join session');
         }
+      } else {
+        alert('Failed to create session');
       }
     } catch (error) {
       console.error('Error creating session:', error);

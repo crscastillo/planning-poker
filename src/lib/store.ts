@@ -85,6 +85,11 @@ export const sessionStore = {
       return undefined;
     }
 
+    // Ensure users array exists
+    if (!session.users) {
+      session.users = [];
+    }
+
     return session;
   },
 
@@ -94,9 +99,10 @@ export const sessionStore = {
       users: session.users || [],
     };
 
+    // Use upload with upsert to update existing file
     const { error } = await supabase.storage
       .from(BUCKET_NAME)
-      .update(`${session.id}.json`, JSON.stringify(sessionWithUsers), {
+      .upload(`${session.id}.json`, JSON.stringify(sessionWithUsers), {
         contentType: 'application/json',
         upsert: true,
       });

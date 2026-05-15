@@ -50,6 +50,14 @@ export default function SessionPage() {
     }
 
     fetchSession();
+    
+    // Force another fetch after 1 second to ensure we have fresh data
+    // This helps with storage consistency after user joins
+    const timeout = setTimeout(() => {
+      fetchSession();
+    }, 1000);
+
+    return () => clearTimeout(timeout);
   }, [sessionId, fetchSession]);
 
   useEffect(() => {
@@ -269,9 +277,17 @@ export default function SessionPage() {
 
   // Get creator name
   const getCreatorName = (): string => {
-    if (!session?.createdBy) return 'Unknown';
-    const creator = session.users.find(u => u.id === session.createdBy);
-    return creator?.name || 'Unknown';
+    if (!session?.createdBy) {
+      console.log('No createdBy field in session');
+      return 'Unknown';
+    }
+    console.log('Looking for creator:', session.createdBy, 'in users:', session.users);
+    const creator = session.users?.find(u => u.id === session.createdBy);
+    if (!creator) {
+      console.log('Creator not found in users array');
+      return 'Unknown';
+    }
+    return creator.name;
   };
 
   // Format expiry time
