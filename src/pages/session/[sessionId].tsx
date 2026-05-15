@@ -105,12 +105,15 @@ export default function SessionPage() {
     if (!newItemTitle.trim() || !sessionId) return;
 
     try {
+      const creatorId = localStorage.getItem(`session_creator_${sessionId}`);
+      
       const response = await fetch(`/api/sessions/${sessionId}/items`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           title: newItemTitle, 
-          description: newItemDescription 
+          description: newItemDescription,
+          creatorId
         }),
       });
 
@@ -118,6 +121,10 @@ export default function SessionPage() {
         setNewItemTitle('');
         setNewItemDescription('');
         await fetchSession();
+      } else if (response.status === 403) {
+        alert('Only the session creator can add items');
+      } else {
+        alert('Failed to add item');
       }
     } catch (err) {
       console.error('Error adding item:', err);
@@ -470,28 +477,36 @@ export default function SessionPage() {
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">Items</h2>
                 
-                <form onSubmit={handleAddItem} className="mb-6 space-y-3">
-                  <input
-                    type="text"
-                    value={newItemTitle}
-                    onChange={(e) => setNewItemTitle(e.target.value)}
-                    placeholder="Item title"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
-                  />
-                  <textarea
-                    value={newItemDescription}
-                    onChange={(e) => setNewItemDescription(e.target.value)}
-                    placeholder="Description (optional)"
-                    rows={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
-                  />
-                  <button
-                    type="submit"
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition"
-                  >
-                    Add Item
-                  </button>
-                </form>
+                {isCreator && (
+                  <form onSubmit={handleAddItem} className="mb-6 space-y-3">
+                    <input
+                      type="text"
+                      value={newItemTitle}
+                      onChange={(e) => setNewItemTitle(e.target.value)}
+                      placeholder="Item title"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+                    />
+                    <textarea
+                      value={newItemDescription}
+                      onChange={(e) => setNewItemDescription(e.target.value)}
+                      placeholder="Description (optional)"
+                      rows={2}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+                    />
+                    <button
+                      type="submit"
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition"
+                    >
+                      Add Item
+                    </button>
+                  </form>
+                )}
+
+                {!isCreator && session?.items.length === 0 && (
+                  <p className="text-sm text-gray-500 text-center py-4 mb-6">
+                    Waiting for session creator to add items...
+                  </p>
+                )}
 
                 <div className="space-y-2 max-h-96 overflow-y-auto">
                   {session?.items.map((item) => (

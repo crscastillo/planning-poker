@@ -10,10 +10,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method === 'POST') {
-    const { title, description } = req.body;
+    const { title, description, creatorId } = req.body;
 
     if (!title || typeof title !== 'string') {
       return res.status(400).json({ error: 'Item title is required' });
+    }
+
+    // Get session to check creator
+    const session = await sessionStore.getSession(sessionId);
+    if (!session) {
+      return res.status(404).json({ error: 'Session not found or expired' });
+    }
+
+    // Verify the requester is the session creator
+    if (!creatorId || session.createdBy !== creatorId) {
+      return res.status(403).json({ error: 'Only the session creator can add items' });
     }
 
     const item: Item = {
