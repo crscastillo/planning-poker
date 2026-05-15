@@ -284,7 +284,44 @@ coverage/lcov-report/index.html
 
 **Note**: Console.error messages during test runs are expected when testing error handling paths.
 
-## 🐛 Common Issues
+## � CI/CD Integration
+
+### Vercel Deployment
+
+The project is configured to automatically run tests during the Vercel build process. The build script in `package.json` runs tests before building:
+
+```json
+"build": "npm run test && next build"
+```
+
+**How it works:**
+- When you push to your repository or deploy to Vercel, the build process runs all tests first
+- If **any test fails**, the build stops immediately with exit code 1
+- Only if **all tests pass** will the Next.js production build proceed
+- This ensures broken code is never deployed to production
+
+### GitHub Actions (Optional)
+
+You can also set up GitHub Actions for additional CI checks. Create `.github/workflows/test.yml`:
+
+```yaml
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npm test
+```
+
+## �🐛 Common Issues
 
 ### Issue: Tests timeout
 **Solution**: Increase timeout for async operations
