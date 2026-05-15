@@ -282,21 +282,6 @@ export default function SessionPage() {
 
   const suggestedEstimate = currentItem ? getSuggestedEstimate(currentItem) : null;
 
-  // Get creator name
-  const getCreatorName = (): string => {
-    if (!session?.createdBy) {
-      console.log('No createdBy field in session');
-      return 'Unknown';
-    }
-    console.log('Looking for creator:', session.createdBy, 'in users:', session.users);
-    const creator = session.users?.find(u => u.id === session.createdBy);
-    if (!creator) {
-      console.log('Creator not found in users array');
-      return 'Unknown';
-    }
-    return creator.name;
-  };
-
   // Format expiry time
   const getExpiryTime = (): string => {
     if (!session) return '';
@@ -455,16 +440,9 @@ export default function SessionPage() {
             <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-700">
               <div className="flex items-center gap-2">
                 <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                <span>Created by <span className="font-semibold text-purple-700">{getCreatorName()}</span></span>
-              </div>
-              <span className="text-gray-400">•</span>
-              <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>Expires at <span className="font-semibold text-purple-700">{getExpiryTime()}</span></span>
+                <span>Planning session expires at <span className="font-semibold text-purple-700">{getExpiryTime()}</span></span>
               </div>
             </div>
           </div>
