@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import type { Session, Item, User } from '@/lib/store';
 import ThemeToggle from '@/components/ThemeToggle';
-import ThemeToggle from '@/components/ThemeToggle';
 
 const FIBONACCI_VALUES = ['0', '1', '2', '3', '5', '8', '13', '21', '34', '?'];
 
@@ -398,12 +397,13 @@ export default function SessionPage() {
                 <button
                   onClick={() => router.push('/')}
                   className="text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 flex items-center gap-1 transition"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                Home
-              </button>
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                  Home
+                </button>
+              </div>
             </div>
           </div>
         </header>
@@ -459,8 +459,8 @@ export default function SessionPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column - Items List */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">Items</h2>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">Items</h2>
                 
                 {isCreator && (
                   <form onSubmit={handleAddItem} className="mb-6 space-y-3">
@@ -469,18 +469,18 @@ export default function SessionPage() {
                       value={newItemTitle}
                       onChange={(e) => setNewItemTitle(e.target.value)}
                       placeholder="Item title"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
                     />
                     <textarea
                       value={newItemDescription}
                       onChange={(e) => setNewItemDescription(e.target.value)}
                       placeholder="Description (optional)"
                       rows={2}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
                     />
                     <button
                       type="submit"
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition"
+                      className="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium transition"
                     >
                       Add Item
                     </button>
@@ -488,7 +488,7 @@ export default function SessionPage() {
                 )}
 
                 {!isCreator && session?.items.length === 0 && (
-                  <p className="text-sm text-gray-500 text-center py-4 mb-6">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4 mb-6">
                     Waiting for session creator to add items...
                   </p>
                 )}
@@ -502,19 +502,19 @@ export default function SessionPage() {
                         isCreator ? 'cursor-pointer' : 'cursor-default'
                       } ${
                         session.currentItemId === item.id
-                          ? 'bg-purple-100 border-2 border-purple-500'
-                          : 'bg-gray-50 hover:bg-gray-100 border border-gray-200'
+                          ? 'bg-purple-100 dark:bg-purple-900 border-2 border-purple-500 dark:border-purple-400'
+                          : 'bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600'
                       }`}
                     >
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
-                          <h3 className="font-medium text-gray-900 text-sm">{item.title}</h3>
+                          <h3 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{item.title}</h3>
                           {item.description && (
-                            <p className="text-xs text-gray-600 mt-1">{item.description}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{item.description}</p>
                           )}
                         </div>
                         {item.finalEstimate && (
-                          <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded">
+                          <span className="ml-2 px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs font-semibold rounded">
                             {item.finalEstimate}
                           </span>
                         )}
@@ -522,7 +522,7 @@ export default function SessionPage() {
                     </div>
                   ))}
                   {session?.items.length === 0 && (
-                    <p className="text-sm text-gray-500 text-center py-4">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">
                       No items yet. Add one to start!
                     </p>
                   )}
@@ -530,17 +530,17 @@ export default function SessionPage() {
               </div>
 
               {/* Participants */}
-              <div className="bg-white rounded-lg shadow-md p-6 mt-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-6">
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
                   Participants ({session?.users.length || 0})
                 </h2>
                 <div className="space-y-2">
                   {session?.users.map((user) => (
                     <div key={user.id} className="flex items-center space-x-2">
-                      <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                      <div className="w-8 h-8 bg-purple-500 dark:bg-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                         {user.name.charAt(0).toUpperCase()}
                       </div>
-                      <span className="text-sm text-gray-700">{user.name}</span>
+                      <span className="text-sm text-gray-700 dark:text-gray-300">{user.name}</span>
                     </div>
                   ))}
                 </div>
@@ -550,20 +550,20 @@ export default function SessionPage() {
             {/* Right Column - Voting Area */}
             <div className="lg:col-span-2">
               {currentItem ? (
-                <div className="bg-white rounded-lg shadow-md p-8">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
                   <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                       {currentItem.title}
                     </h2>
                     {currentItem.description && (
-                      <p className="text-gray-600">{currentItem.description}</p>
+                      <p className="text-gray-600 dark:text-gray-400">{currentItem.description}</p>
                     )}
                   </div>
 
                   {/* Voting Cards */}
                   {!currentItem.revealed && (
                     <div className="mb-8">
-                      <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
                         Choose your estimate
                       </h3>
                       <div className="grid grid-cols-5 gap-4">
@@ -574,7 +574,7 @@ export default function SessionPage() {
                             className={`aspect-[3/4] rounded-xl border-2 font-bold text-2xl transition-all transform hover:scale-105 ${
                               userVote?.value === value
                                 ? 'bg-purple-600 text-white border-purple-600 shadow-lg'
-                                : 'bg-white text-gray-700 border-gray-300 hover:border-purple-400'
+                                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:border-purple-400 dark:hover:border-purple-500'
                             }`}
                           >
                             {value}
@@ -587,7 +587,7 @@ export default function SessionPage() {
                   {/* Voting Status */}
                   <div className="mb-6">
                     <div className="flex justify-between items-center mb-3">
-                      <h3 className="text-lg font-semibold text-gray-800">
+                      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
                         Votes ({currentItem.votes.length}/{session?.users.length || 0})
                       </h3>
                       {isCreator && (
@@ -616,14 +616,14 @@ export default function SessionPage() {
                       {currentItem.votes.map((vote) => (
                         <div
                           key={vote.userId}
-                          className="bg-gray-50 rounded-lg p-3 border border-gray-200"
+                          className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border border-gray-200 dark:border-gray-600"
                         >
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-700 truncate">
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
                               {vote.userName}
                             </span>
                             {currentItem.revealed && vote.value ? (
-                              <span className="ml-2 px-2 py-1 bg-purple-100 text-purple-800 text-sm font-bold rounded">
+                              <span className="ml-2 px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-sm font-bold rounded">
                                 {vote.value}
                               </span>
                             ) : (
@@ -637,13 +637,13 @@ export default function SessionPage() {
 
                   {/* Results */}
                   {currentItem.revealed && currentItem.votes.length > 0 && (
-                    <div className="bg-purple-50 rounded-lg p-6 border border-purple-200">
+                    <div className="bg-purple-50 dark:bg-gray-700 rounded-lg p-6 border border-purple-200 dark:border-gray-600">
                       <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-semibold text-gray-800">Results</h3>
+                        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">Results</h3>
                         {suggestedEstimate && (
                           <div className="text-sm">
-                            <span className="text-gray-600">Suggested: </span>
-                            <span className="px-3 py-1 bg-purple-600 text-white font-bold rounded-lg">
+                            <span className="text-gray-600 dark:text-gray-400">Suggested: </span>
+                            <span className="px-3 py-1 bg-purple-600 dark:bg-purple-500 text-white font-bold rounded-lg">
                               {suggestedEstimate}
                             </span>
                           </div>
@@ -657,11 +657,11 @@ export default function SessionPage() {
                           
                           return count > 0 ? (
                             <div key={value} className="text-center">
-                              <div className="text-2xl font-bold text-purple-600">{value}</div>
-                              <div className="text-sm text-gray-600">{count} vote{count !== 1 ? 's' : ''}</div>
-                              <div className="mt-1 bg-gray-200 rounded-full h-2">
+                              <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{value}</div>
+                              <div className="text-sm text-gray-600 dark:text-gray-400">{count} vote{count !== 1 ? 's' : ''}</div>
+                              <div className="mt-1 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
                                 <div 
-                                  className="bg-purple-600 h-2 rounded-full"
+                                  className="bg-purple-600 dark:bg-purple-500 h-2 rounded-full"
                                   style={{ width: `${percentage}%` }}
                                 />
                               </div>
@@ -672,7 +672,7 @@ export default function SessionPage() {
 
                       {!currentItem.finalEstimate && isCreator && (
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Set Final Estimate
                           </label>
                           <div className="flex gap-2">
@@ -680,7 +680,7 @@ export default function SessionPage() {
                               <button
                                 key={value}
                                 onClick={() => handleSetEstimate(currentItem.id, value)}
-                                className="px-4 py-2 bg-white border-2 border-purple-300 text-purple-700 rounded-lg hover:bg-purple-600 hover:text-white font-semibold transition"
+                                className="px-4 py-2 bg-white dark:bg-gray-600 border-2 border-purple-300 dark:border-purple-500 text-purple-700 dark:text-purple-300 rounded-lg hover:bg-purple-600 hover:text-white dark:hover:bg-purple-500 font-semibold transition"
                               >
                                 {value}
                               </button>
@@ -691,8 +691,8 @@ export default function SessionPage() {
 
                       {currentItem.finalEstimate && (
                         <div className="text-center">
-                          <div className="text-sm text-gray-600 mb-1">Final Estimate</div>
-                          <div className="text-4xl font-bold text-green-600">
+                          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Final Estimate</div>
+                          <div className="text-4xl font-bold text-green-600 dark:text-green-400">
                             {currentItem.finalEstimate}
                           </div>
                         </div>
@@ -701,8 +701,8 @@ export default function SessionPage() {
                   )}
                 </div>
               ) : (
-                <div className="bg-white rounded-lg shadow-md p-12 text-center">
-                  <div className="text-gray-400 mb-4">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center">
+                  <div className="text-gray-400 dark:text-gray-500 mb-4">
                     <svg
                       className="mx-auto h-24 w-24"
                       fill="none"
@@ -717,10 +717,10 @@ export default function SessionPage() {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                  <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     No item selected
                   </h3>
-                  <p className="text-gray-500">
+                  <p className="text-gray-500 dark:text-gray-400">
                     Add an item and select it to start voting
                   </p>
                 </div>
@@ -729,8 +729,8 @@ export default function SessionPage() {
           </div>
         </div>
         <footer className="mt-8 text-center pb-4">
-          <p className="text-sm text-gray-600">
-            Developed by <span className="font-semibold text-purple-600">Carlos Castillo</span>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Developed by <span className="font-semibold text-purple-600 dark:text-purple-400">Carlos Castillo</span>
           </p>
         </footer>
       </main>

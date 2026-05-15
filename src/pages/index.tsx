@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import ThemeToggle from '@/components/ThemeToggle';
 
 interface SessionSummary {
   id: string;
@@ -115,33 +116,36 @@ export default function Home() {
         <meta name="description" content="Agile planning poker for distributed teams" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100">
-        <header className="bg-white shadow-sm border-b">
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 dark:from-gray-900 dark:to-gray-800">
+        <header className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
           <div className="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8">
-            <h1 className="text-xl font-bold text-purple-600">Planning Pocket</h1>
+            <div className="flex items-center justify-between">
+              <h1 className="text-xl font-bold text-purple-600 dark:text-purple-400">Planning Pocket</h1>
+              <ThemeToggle />
+            </div>
           </div>
         </header>
         
         <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="text-center mb-8">
-            <h2 className="text-4xl font-bold text-gray-800 mb-2">
+            <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">
               Planning Poker
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               Estimate your stories with your team
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* My Active Sessions */}
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">My Active Sessions</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">My Active Sessions</h3>
               
               {loadingSessions ? (
-                <div className="text-center py-8 text-gray-500">Loading...</div>
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">Loading...</div>
               ) : mySessions.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <svg className="mx-auto h-12 w-12 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                   </svg>
                   <p>No active sessions</p>
@@ -153,18 +157,18 @@ export default function Home() {
                     <button
                       key={session.id}
                       onClick={() => router.push(`/session/${session.id}`)}
-                      className="w-full text-left p-4 border border-gray-200 rounded-lg hover:border-purple-300 hover:bg-purple-50 transition"
+                      className="w-full text-left p-4 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700 rounded-lg hover:border-purple-300 dark:hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-gray-600 transition"
                     >
                       <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-semibold text-gray-900">{session.name}</h4>
-                        <span className="text-xs text-gray-500">
+                        <h4 className="font-semibold text-gray-900 dark:text-gray-100">{session.name}</h4>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
                           {new Date(session.expiresAt).toLocaleTimeString('en-US', { 
                             hour: 'numeric', 
                             minute: '2-digit' 
                           })}
                         </span>
                       </div>
-                      <div className="flex gap-4 text-sm text-gray-600">
+                      <div className="flex gap-4 text-sm text-gray-600 dark:text-gray-400">
                         <span>{session.itemCount} items</span>
                         <span>•</span>
                         <span>{session.userCount} users</span>
@@ -176,12 +180,12 @@ export default function Home() {
             </div>
 
             {/* Create New Session */}
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">Create New Session</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">Create New Session</h3>
               
               <form onSubmit={handleCreateSession} className="space-y-4">
                 <div>
-                  <label htmlFor="creatorName" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="creatorName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Your Name
                   </label>
                   <input
@@ -190,12 +194,12 @@ export default function Home() {
                     value={creatorName}
                     onChange={(e) => setCreatorName(e.target.value)}
                     placeholder="John Doe"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="sessionName" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="sessionName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Session Name
                   </label>
                   <input
@@ -204,7 +208,7 @@ export default function Home() {
                     value={sessionName}
                     onChange={(e) => setSessionName(e.target.value)}
                     placeholder="Sprint 24 Planning"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
                     required
                   />
                 </div>
@@ -212,14 +216,14 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? 'Creating...' : 'Create Session'}
                 </button>
               </form>
 
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <p className="text-sm text-gray-500 text-center">
+              <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
                   Sessions expire after 4 hours
                 </p>
               </div>
@@ -227,8 +231,8 @@ export default function Home() {
           </div>
 
           <footer className="mt-12 text-center">
-            <p className="text-sm text-gray-600">
-              Developed by <span className="font-semibold text-purple-600">Carlos Castillo</span>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Developed by <span className="font-semibold text-purple-600 dark:text-purple-400">Carlos Castillo</span>
             </p>
           </footer>
         </div>
