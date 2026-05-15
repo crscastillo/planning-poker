@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { sessionStore, Vote } from '@/lib/store';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { sessionId, itemId } = req.query;
 
   if (typeof sessionId !== 'string' || typeof itemId !== 'string') {
@@ -22,7 +22,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       timestamp: Date.now(),
     };
 
-    const success = sessionStore.addVote(sessionId, itemId, vote);
+    const success = await sessionStore.addVote(sessionId, itemId, vote);
 
     if (!success) {
       return res.status(404).json({ error: 'Session or item not found' });

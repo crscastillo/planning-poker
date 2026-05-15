@@ -1,3 +1,5 @@
+import { supabase, SessionData, ItemData, VoteData, UserData } from './supabase';
+
 export interface Vote {
   userId: string;
   userName: string;
@@ -21,7 +23,7 @@ export interface Session {
   expiresAt: number;
   items: Item[];
   currentItemId: string | null;
-  createdBy?: string; // User ID of session creator
+  createdBy?: string;
 }
 
 export interface User {
@@ -30,93 +32,113 @@ export interface User {
   sessionId: string;
 }
 
-// Use global to prevent re-initialization during hot reloads in development
-declare global {
-  var planningPokerSessions: Map<string, Session> | undefined;
-  var planningPokerUsers: Map<string, User> | undefined;
-  var planningPokerCleanupInterval: NodeJS.Timeout | undefined;
-}
-
-// In-memory storage - persist across hot reloads
-const sessions = global.planningPokerSessions || new Map<string, Session>();
-const users = global.planningPokerUsers || new Map<string, User>();
-
-if (process.env.NODE_ENV !== 'production') {
-  global.planningPokerSessions = sessions;
-  global.planningPokerUsers = users;
-}
-
-// Cleanup expired sessions every 5 minutes (only set up once)
-if (!global.planningPokerCleanupInterval) {
-  const cleanupInterval = setInterval(() => {
-    const now = Date.now();
-    for (const [sessionId, session] of sessions.entries()) {
-      if (session.expiresAt < now) {
-        sessions.delete(sessionId);
-        // Clean up users in this session
-        for (const [userId, user] of users.entries()) {
-          if (user.sessionId === sessionId) {
-            users.delete(userId);
-          }
-        }
-      }
-    }
-  }, 5 * 60 * 1000);
-
-  if (process.env.NODE_ENV !== 'production') {
-    global.planningPokerCleanupInterval = cleanupInterval;
+// Helper function to clean up expired sessions on read
+async function cleanupExpiredSessions() {
+  try {
+    const now = new Date().toISOString();
+    await supabase
+      .from('sessions')
+      .delete()
+      .lt('expires_at', now);
+  } catch (error) {
+    console.error('Error cleaning up expired sessions:', error);
   }
 }
 
-export const sessionStore = {, createdBy?: string): Session {
+export const sessionStore = {
+  async createSession(id: string, name: string, createdBy?: string): Promise<Session> {
     const now = Date.now();
+    const expiresAt = now + 4 * 60 * 60 * 1000; // 4 hours
+    
     const session: Session = {
       id,
       name,
       createdAt: now,
-      expiresAt: now + 4 * 60 * 60 * 1000, // 4 hours
+      expiresAt,
       items: [],
       currentItemId: null,
-      createdBy
-      currentItemId: null,
+      createdBy,
     };
-    sessions.set(id, session);
+
+    const sessionData: SessionData = {
+      ...session,
+      users: [],
+    };
+
+    const { error } = await supabase
+      .from('sessions')
+      .insert({
+        id,
+        data: sessionData as any,
+        expires_at: new Date(expiresAt).toISOString(),
+      });
+
+    if (error) {
+      console.error('Error creating session:', error);
+      throw new Error('Failed to create session');
+    }
+
     return session;
   },
 
-  getSession(id: string): Session | undefined {
-    const session = sessions.get(id);
-    if (session && session.expiresAt > Date.now()) {
-      return session;
+  async getSession(id: string): Promise<(Session & { users: User[] }) | undefined> {
+    // Clean up expired sessions
+    await cleanupExpiredSessions();
+
+    const { data, error } = await supabase
+      .from('sessions')
+      .select('data')
+      .eq('id', id)
+      .gt('expires_at', new Date().toISOString())
+      .single();
+
+    if (error || !data) {
+      return undefined;
     }
-    if (session) {
-      sessions.delete(id);
-    }
-    return undefined;
+
+    const sessionData = data.data as any as SessionData;
+    return sessionData as Session & { users: User[] };
   },
 
-  updateSession(session: Session): void {
-    sessions.set(session.id, session);
+  async updateSession(session: Session & { users?: User[] }): Promise<void> {
+    const sessionData: SessionData = {
+      ...session,
+      users: session.users || [],
+    };
+
+    const { error } = await supabase
+      .from('sessions')
+      .update({
+        data: sessionData as any,
+      })
+      .eq('id', session.id);
+
+    if (error) {
+      console.error('Error updating session:', error);
+      throw new Error('Failed to update session');
+    }
   },
 
-  addItem(sessionId: string, item: Item): boolean {
-    const session = this.getSession(sessionId);
+  async addItem(sessionId: string, item: Item): Promise<boolean> {
+    const session = await this.getSession(sessionId);
     if (!session) return false;
+    
     session.items.push(item);
-    this.updateSession(session);
+    await this.updateSession(session);
     return true;
   },
 
-  setCurrentItem(sessionId: string, itemId: string | null): boolean {
-    const session = this.getSession(sessionId);
+  async setCurrentItem(sessionId: string, itemId: string | null): Promise<boolean> {
+    const session = await this.getSession(sessionId);
     if (!session) return false;
+    
     session.currentItemId = itemId;
-    this.updateSession(session);
+    await this.updateSession(session);
     return true;
   },
 
-  addVote(sessionId: string, itemId: string, vote: Vote): boolean {
-    const session = this.getSession(sessionId);
+  async addVote(sessionId: string, itemId: string, vote: Vote): Promise<boolean> {
+    const session = await this.getSession(sessionId);
     if (!session) return false;
     
     const item = session.items.find(i => i.id === itemId);
@@ -126,24 +148,24 @@ export const sessionStore = {, createdBy?: string): Session {
     item.votes = item.votes.filter(v => v.userId !== vote.userId);
     item.votes.push(vote);
     
-    this.updateSession(session);
+    await this.updateSession(session);
     return true;
   },
 
-  revealVotes(sessionId: string, itemId: string): boolean {
-    const session = this.getSession(sessionId);
+  async revealVotes(sessionId: string, itemId: string): Promise<boolean> {
+    const session = await this.getSession(sessionId);
     if (!session) return false;
     
     const item = session.items.find(i => i.id === itemId);
     if (!item) return false;
 
     item.revealed = true;
-    this.updateSession(session);
+    await this.updateSession(session);
     return true;
   },
 
-  resetVotes(sessionId: string, itemId: string): boolean {
-    const session = this.getSession(sessionId);
+  async resetVotes(sessionId: string, itemId: string): Promise<boolean> {
+    const session = await this.getSession(sessionId);
     if (!session) return false;
     
     const item = session.items.find(i => i.id === itemId);
@@ -152,31 +174,45 @@ export const sessionStore = {, createdBy?: string): Session {
     item.votes = [];
     item.revealed = false;
     item.finalEstimate = undefined;
-    this.updateSession(session);
+    await this.updateSession(session);
     return true;
   },
 
-  setFinalEstimate(sessionId: string, itemId: string, estimate: string): boolean {
-    const session = this.getSession(sessionId);
+  async setFinalEstimate(sessionId: string, itemId: string, estimate: string): Promise<boolean> {
+    const session = await this.getSession(sessionId);
     if (!session) return false;
     
     const item = session.items.find(i => i.id === itemId);
     if (!item) return false;
 
     item.finalEstimate = estimate;
-    this.updateSession(session);
+    await this.updateSession(session);
     return true;
   },
 
-  addUser(user: User): void {
-    users.set(user.id, user);
+  async addUser(user: User): Promise<void> {
+    const session = await this.getSession(user.sessionId);
+    if (!session) throw new Error('Session not found');
+
+    // Check if user already exists
+    const existingUser = session.users.find(u => u.id === user.id);
+    if (!existingUser) {
+      session.users.push(user);
+      await this.updateSession(session);
+    }
   },
 
-  getUser(id: string): User | undefined {
-    return users.get(id);
+  async getUser(id: string, sessionId: string): Promise<User | undefined> {
+    const session = await this.getSession(sessionId);
+    if (!session) return undefined;
+    
+    return session.users.find(u => u.id === id);
   },
 
-  getUsersBySession(sessionId: string): User[] {
-    return Array.from(users.values()).filter(u => u.sessionId === sessionId);
+  async getUsersBySession(sessionId: string): Promise<User[]> {
+    const session = await this.getSession(sessionId);
+    if (!session) return [];
+    
+    return session.users;
   },
 };

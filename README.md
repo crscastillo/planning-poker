@@ -92,18 +92,17 @@ The application uses a simple in-memory storage system:
 ## Limitations
 
 - Sessions expire after 4 hours
-- Data is not persisted across server restarts
 - Polling-based updates (2-second intervals)
-- Single server instance (no horizontal scaling)
+- Requires Supabase setup for persistence
 
 ## Future Enhancements
 
-- WebSocket support for real-time updates
-- Persistent storage option
+- WebSocket/Supabase Realtime for instant updates
 - Timer for voting rounds
 - Export results to CSV/JSON
 - Custom card values
 - Session password protection
+- Historical session analytics
 
 ## License
 

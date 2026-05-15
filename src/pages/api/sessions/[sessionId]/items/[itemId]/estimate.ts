@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { sessionStore } from '@/lib/store';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { sessionId, itemId } = req.query;
 
   if (typeof sessionId !== 'string' || typeof itemId !== 'string') {
@@ -15,7 +15,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(400).json({ error: 'Estimate is required' });
     }
 
-    const success = sessionStore.setFinalEstimate(sessionId, itemId, estimate);
+    const success = await sessionStore.setFinalEstimate(sessionId, itemId, estimate);
 
     if (!success) {
       return res.status(404).json({ error: 'Session or item not found' });

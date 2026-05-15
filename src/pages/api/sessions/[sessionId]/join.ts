@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
 import { sessionStore, User } from '@/lib/store';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { sessionId } = req.query;
 
   if (typeof sessionId !== 'string') {
@@ -16,7 +16,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(400).json({ error: 'User name is required' });
     }
 
-    const session = sessionStore.getSession(sessionId);
+    const session = await sessionStore.getSession(sessionId);
     if (!session) {
       return res.status(404).json({ error: 'Session not found or expired' });
     }
@@ -28,9 +28,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       sessionId,
     };
 
-    sessionStore.addUser(user);
-
-    return res.status(200).json({ user, session });
+    try {
+      await sessionStore.addUser(user);
+      return res.status(200).json({ user, session });
+    } catch (error) {
+      return res.status(500).json({ error: 'Failed to join session' });
+    }
   }
 
   res.status(405).json({ error: 'Method not allowed' });

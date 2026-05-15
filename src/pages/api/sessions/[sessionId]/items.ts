@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
 import { sessionStore, Item } from '@/lib/store';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { sessionId } = req.query;
 
   if (typeof sessionId !== 'string') {
@@ -24,7 +24,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       revealed: false,
     };
 
-    const success = sessionStore.addItem(sessionId, item);
+    const success = await sessionStore.addItem(sessionId, item);
 
     if (!success) {
       return res.status(404).json({ error: 'Session not found or expired' });

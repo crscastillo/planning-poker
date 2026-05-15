@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { sessionStore } from '@/lib/store';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { sessionId } = req.query;
 
   if (typeof sessionId !== 'string') {
@@ -11,7 +11,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     const { currentItemId } = req.body;
 
-    const success = sessionStore.setCurrentItem(sessionId, currentItemId);
+    const success = await sessionStore.setCurrentItem(sessionId, currentItemId);
 
     if (!success) {
       return res.status(404).json({ error: 'Session not found or expired' });
