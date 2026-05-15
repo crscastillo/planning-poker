@@ -215,7 +215,7 @@ export default function SessionPage() {
           <div className="text-xl text-red-600 mb-4">{error}</div>
           <button
             onClick={() => router.push('/')}
-            className="text-indigo-600 hover:text-indigo-700"
+            className="text-purple-600 hover:text-purple-700"
           >
             Go back home
           </button>
@@ -230,7 +230,7 @@ export default function SessionPage() {
         <Head>
           <title>Join Session - Planning Poker</title>
         </Head>
-        <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center p-4">
           <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
             <h1 className="text-3xl font-bold text-gray-800 mb-2">
               {session?.name}
@@ -248,14 +248,14 @@ export default function SessionPage() {
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                   placeholder="John Doe"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
                   required
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
               >
                 Join Session
               </button>
@@ -284,7 +284,7 @@ export default function SessionPage() {
               </div>
               <button
                 onClick={copyInviteLink}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
               >
                 Copy Invite Link
               </button>
@@ -305,18 +305,18 @@ export default function SessionPage() {
                     value={newItemTitle}
                     onChange={(e) => setNewItemTitle(e.target.value)}
                     placeholder="Item title"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
                   />
                   <textarea
                     value={newItemDescription}
                     onChange={(e) => setNewItemDescription(e.target.value)}
                     placeholder="Description (optional)"
                     rows={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
                   />
                   <button
                     type="submit"
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition"
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition"
                   >
                     Add Item
                   </button>
@@ -329,7 +329,7 @@ export default function SessionPage() {
                       onClick={() => handleSetCurrentItem(item.id)}
                       className={`p-3 rounded-lg cursor-pointer transition ${
                         session.currentItemId === item.id
-                          ? 'bg-indigo-100 border-2 border-indigo-500'
+                          ? 'bg-purple-100 border-2 border-purple-500'
                           : 'bg-gray-50 hover:bg-gray-100 border border-gray-200'
                       }`}
                     >
@@ -364,7 +364,7 @@ export default function SessionPage() {
                 <div className="space-y-2">
                   {session?.users.map((user) => (
                     <div key={user.id} className="flex items-center space-x-2">
-                      <div className="w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                      <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                       <span className="text-sm text-gray-700">{user.name}</span>
@@ -400,8 +400,8 @@ export default function SessionPage() {
                             onClick={() => handleVote(currentItem.id, value)}
                             className={`aspect-[3/4] rounded-xl border-2 font-bold text-2xl transition-all transform hover:scale-105 ${
                               userVote?.value === value
-                                ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg'
-                                : 'bg-white text-gray-700 border-gray-300 hover:border-indigo-400'
+                                ? 'bg-purple-600 text-white border-purple-600 shadow-lg'
+                                : 'bg-white text-gray-700 border-gray-300 hover:border-purple-400'
                             }`}
                           >
                             {value}
@@ -448,7 +448,7 @@ export default function SessionPage() {
                               {vote.userName}
                             </span>
                             {currentItem.revealed && vote.value ? (
-                              <span className="ml-2 px-2 py-1 bg-indigo-100 text-indigo-800 text-sm font-bold rounded">
+                              <span className="ml-2 px-2 py-1 bg-purple-100 text-purple-800 text-sm font-bold rounded">
                                 {vote.value}
                               </span>
                             ) : (
@@ -462,7 +462,7 @@ export default function SessionPage() {
 
                   {/* Results */}
                   {currentItem.revealed && currentItem.votes.length > 0 && (
-                    <div className="bg-indigo-50 rounded-lg p-6 border border-indigo-200">
+                    <div className="bg-purple-50 rounded-lg p-6 border border-purple-200">
                       <h3 className="text-lg font-semibold text-gray-800 mb-4">Results</h3>
                       
                       <div className="grid grid-cols-5 gap-2 mb-4">
@@ -472,11 +472,11 @@ export default function SessionPage() {
                           
                           return count > 0 ? (
                             <div key={value} className="text-center">
-                              <div className="text-2xl font-bold text-indigo-600">{value}</div>
+                              <div className="text-2xl font-bold text-purple-600">{value}</div>
                               <div className="text-sm text-gray-600">{count} vote{count !== 1 ? 's' : ''}</div>
                               <div className="mt-1 bg-gray-200 rounded-full h-2">
                                 <div 
-                                  className="bg-indigo-600 h-2 rounded-full"
+                                  className="bg-purple-600 h-2 rounded-full"
                                   style={{ width: `${percentage}%` }}
                                 />
                               </div>
@@ -495,7 +495,7 @@ export default function SessionPage() {
                               <button
                                 key={value}
                                 onClick={() => handleSetEstimate(currentItem.id, value)}
-                                className="px-4 py-2 bg-white border-2 border-indigo-300 text-indigo-700 rounded-lg hover:bg-indigo-600 hover:text-white font-semibold transition"
+                                className="px-4 py-2 bg-white border-2 border-purple-300 text-purple-700 rounded-lg hover:bg-purple-600 hover:text-white font-semibold transition"
                               >
                                 {value}
                               </button>

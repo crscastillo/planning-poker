@@ -38,7 +38,7 @@ export default function Home() {
         <meta name="description" content="Agile planning poker for distributed teams" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <main className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-800 mb-2">
@@ -60,7 +60,7 @@ export default function Home() {
                 value={sessionName}
                 onChange={(e) => setSessionName(e.target.value)}
                 placeholder="Sprint 24 Planning"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
                 required
               />
             </div>
@@ -68,7 +68,7 @@ export default function Home() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Creating...' : 'Create Session'}
             </button>
