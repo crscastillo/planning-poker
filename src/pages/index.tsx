@@ -13,14 +13,19 @@ export default function Home() {
 
     setLoading(true);
     try {
+      // Generate a temporary creator ID
+      const creatorId = crypto.randomUUID();
+      
       const response = await fetch('/api/sessions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: sessionName }),
+        body: JSON.stringify({ name: sessionName, createdBy: creatorId }),
       });
 
       if (response.ok) {
         const session = await response.json();
+        // Store creator ID in localStorage
+        localStorage.setItem(`session_creator_${session.id}`, creatorId);
         router.push(`/session/${session.id}`);
       }
     } catch (error) {

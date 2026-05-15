@@ -21,6 +21,7 @@ export interface Session {
   expiresAt: number;
   items: Item[];
   currentItemId: string | null;
+  createdBy?: string; // User ID of session creator
 }
 
 export interface User {
@@ -67,8 +68,7 @@ if (!global.planningPokerCleanupInterval) {
   }
 }
 
-export const sessionStore = {
-  createSession(id: string, name: string): Session {
+export const sessionStore = {, createdBy?: string): Session {
     const now = Date.now();
     const session: Session = {
       id,
@@ -76,6 +76,8 @@ export const sessionStore = {
       createdAt: now,
       expiresAt: now + 4 * 60 * 60 * 1000, // 4 hours
       items: [],
+      currentItemId: null,
+      createdBy
       currentItemId: null,
     };
     sessions.set(id, session);

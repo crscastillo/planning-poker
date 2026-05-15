@@ -18,6 +18,7 @@ export default function SessionPage() {
   const [selectedVote, setSelectedVote] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isCreator, setIsCreator] = useState(false);
 
   const fetchSession = useCallback(async () => {
     if (!sessionId || typeof sessionId !== 'string') return;
@@ -50,6 +51,15 @@ export default function SessionPage() {
 
     fetchSession();
   }, [sessionId, fetchSession]);
+
+  useEffect(() => {
+    // Check if user is the creator
+    if (!session) return;
+    const creatorId = localStorage.getItem(`session_creator_${sessionId}`);
+    if (creatorId && session.createdBy === creatorId) {
+      setIsCreator(true);
+    }
+  }, [session, sessionId]);
 
   useEffect(() => {
     // Poll for updates every 2 seconds
@@ -200,6 +210,37 @@ export default function SessionPage() {
   const currentItem = getCurrentItem();
   const userVote = currentItem?.votes.find(v => v.userId === currentUser?.id);
 
+  // Calculate suggested estimate based on votes (mode - most common vote)
+  const getSuggestedEstimate = (item: Item): string | null => {
+    if (!item.revealed || item.votes.length === 0) return null;
+    
+    // Filter out '?' votes for calculation
+    const numericVotes = item.votes
+      .filter(v => v.value && v.value !== '?')
+      .map(v => v.value!);
+    
+    if (numericVotes.length === 0) return null;
+
+    // Find mode (most common vote)
+    const voteCounts = new Map<string, number>();
+    numericVotes.forEach(vote => {
+      voteCounts.set(vote, (voteCounts.get(vote) || 0) + 1);
+    });
+
+    let maxCount = 0;
+    let mode = '';
+    voteCounts.forEach((count, value) => {
+      if (count > maxCount) {
+        maxCount = count;
+        mode = value;
+      }
+    });
+
+    return mode;
+  };
+
+  const suggestedEstimate = currentItem ? getSuggestedEstimate(currentItem) : null;
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -326,8 +367,10 @@ export default function SessionPage() {
                   {session?.items.map((item) => (
                     <div
                       key={item.id}
-                      onClick={() => handleSetCurrentItem(item.id)}
-                      className={`p-3 rounded-lg cursor-pointer transition ${
+                      onClick={() => isCreator && handleSetCurrentItem(item.id)}
+                      className={`p-3 rounded-lg transition ${
+                        isCreator ? 'cursor-pointer' : 'cursor-default'
+                      } ${
                         session.currentItemId === item.id
                           ? 'bg-purple-100 border-2 border-purple-500'
                           : 'bg-gray-50 hover:bg-gray-100 border border-gray-200'
@@ -417,24 +460,26 @@ export default function SessionPage() {
                       <h3 className="text-lg font-semibold text-gray-800">
                         Votes ({currentItem.votes.length}/{session?.users.length || 0})
                       </h3>
-                      <div className="space-x-2">
-                        {!currentItem.revealed && currentItem.votes.length > 0 && (
-                          <button
-                            onClick={() => handleRevealVotes(currentItem.id)}
-                            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
-                          >
-                            Reveal Votes
-                          </button>
-                        )}
-                        {currentItem.revealed && (
-                          <button
-                            onClick={() => handleResetVotes(currentItem.id)}
-                            className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
-                          >
-                            Reset Votes
-                          </button>
-                        )}
-                      </div>
+                      {isCreator && (
+                        <div className="space-x-2">
+                          {!currentItem.revealed && currentItem.votes.length > 0 && (
+                            <button
+                              onClick={() => handleRevealVotes(currentItem.id)}
+                              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+                            >
+                              Reveal Votes
+                            </button>
+                          )}
+                          {currentItem.revealed && (
+                            <button
+                              onClick={() => handleResetVotes(currentItem.id)}
+                              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+                            >
+                              Reset Votes
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
@@ -463,7 +508,17 @@ export default function SessionPage() {
                   {/* Results */}
                   {currentItem.revealed && currentItem.votes.length > 0 && (
                     <div className="bg-purple-50 rounded-lg p-6 border border-purple-200">
-                      <h3 className="text-lg font-semibold text-gray-800 mb-4">Results</h3>
+                      <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-lg font-semibold text-gray-800">Results</h3>
+                        {suggestedEstimate && (
+                          <div className="text-sm">
+                            <span className="text-gray-600">Suggested: </span>
+                            <span className="px-3 py-1 bg-purple-600 text-white font-bold rounded-lg">
+                              {suggestedEstimate}
+                            </span>
+                          </div>
+                        )}
+                      </div>
                       
                       <div className="grid grid-cols-5 gap-2 mb-4">
                         {FIBONACCI_VALUES.map((value) => {
@@ -485,7 +540,7 @@ export default function SessionPage() {
                         })}
                       </div>
 
-                      {!currentItem.finalEstimate && (
+                      {!currentItem.finalEstimate && isCreator && (
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
                             Set Final Estimate

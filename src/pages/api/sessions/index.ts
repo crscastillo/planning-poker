@@ -4,14 +4,14 @@ import { sessionStore } from '@/lib/store';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { name } = req.body;
+    const { name, createdBy } = req.body;
 
     if (!name || typeof name !== 'string') {
       return res.status(400).json({ error: 'Session name is required' });
     }
 
     const sessionId = uuidv4();
-    const session = sessionStore.createSession(sessionId, name);
+    const session = sessionStore.createSession(sessionId, name, createdBy);
 
     return res.status(201).json(session);
   }
