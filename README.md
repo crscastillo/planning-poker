@@ -11,7 +11,8 @@ A simple, real-time planning poker application built with Next.js and deployed o
 - 👥 See who has voted in real-time
 - 🎭 Reveal votes simultaneously
 - ⏱️ Sessions automatically expire after 4 hours
-- 💾 In-memory storage (no database required)
+- 💾 Persistent storage using Supabase Storage (JSON objects)
+- 🔒 Session creator has exclusive control over reveal/reset/estimate actions
 
 ## Getting Started
 
@@ -33,12 +34,15 @@ cd planning-poker
 npm install
 ```
 
-3. Run the development server:
-```bash
-npm run dev
-```
+3. Set up Supabase Storage:
+   - Follow the instructions in [SUPABASE_STORAGE_SETUP.md](SUPABASE_STORAGE_SETUP.md)
+   - Create a `.env.local` file with your Supabase credentials
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+4. Test your setup:
+   - Start dev server: `npm run dev`
+   - Visit http://localhost:3000/api/test-supabase to verify Storage setup
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## Usage
 
@@ -77,23 +81,24 @@ vercel
 - **Framework**: Next.js 14
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
-- **Storage**: In-memory (Map-based)
+- **Storage**: Supabase Storage (JSON objects)
 - **Deployment**: Vercel
 
 ## Architecture
 
-The application uses a simple in-memory storage system:
+The application uses Supabase Storage for persistence:
 
-- Sessions are stored in a Map with automatic cleanup of expired sessions
+- Sessions are stored as JSON files in a Supabase Storage bucket
+- Each session is a single JSON object: `{sessionId}.json`
 - Polling (every 2 seconds) is used to sync state across clients
-- No external database or WebSocket server required
-- Perfect for small teams and temporary sessions
+- Automatic cleanup of expired sessions (4-hour TTL)
+- No relational database - pure object storage
 
 ## Limitations
 
 - Sessions expire after 4 hours
 - Polling-based updates (2-second intervals)
-- Requires Supabase setup for persistence
+- Requires Supabase project with Storage bucket configured
 
 ## Future Enhancements
 

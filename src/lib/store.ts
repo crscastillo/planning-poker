@@ -1,4 +1,6 @@
-import { supabase, SessionData, ItemData, VoteData, UserData } from './supabase';
+import { supabase } from './supabase';
+
+const BUCKET_NAME = 'sessions';
 
 export interface Vote {
   userId: string;
@@ -32,25 +34,12 @@ export interface User {
   sessionId: string;
 }
 
-// Helper function to clean up expired sessions on read
-async function cleanupExpiredSessions() {
-  try {
-    const now = new Date().toISOString();
-    await supabase
-      .from('sessions')
-      .delete()
-      .lt('expires_at', now);
-  } catch (error) {
-    console.error('Error cleaning up expired sessions:', error);
-  }
-}
-
 export const sessionStore = {
   async createSession(id: string, name: string, createdBy?: string): Promise<Session> {
     const now = Date.now();
     const expiresAt = now + 4 * 60 * 60 * 1000; // 4 hours
     
-    const session: Session = {
+    const session: Session & { users: User[] } = {
       id,
       name,
       createdAt: now,
@@ -58,60 +47,59 @@ export const sessionStore = {
       items: [],
       currentItemId: null,
       createdBy,
-    };
-
-    const sessionData: SessionData = {
-      ...session,
       users: [],
     };
 
-    const { error } = await supabase
-      .from('sessions')
-      .insert({
-        id,
-        data: sessionData as any,
-        expires_at: new Date(expiresAt).toISOString(),
+    // Store as JSON file in Supabase Storage
+    const { error } = await supabase.storage
+      .from(BUCKET_NAME)
+      .upload(`${id}.json`, JSON.stringify(session), {
+        contentType: 'application/json',
+        upsert: false,
       });
 
     if (error) {
-      console.error('Error creating session:', error);
-      throw new Error('Failed to create session');
+      console.error('Supabase Storage error creating session:', error);
+      throw new Error(`Failed to create session: ${error.message}`);
     }
 
     return session;
   },
 
   async getSession(id: string): Promise<(Session & { users: User[] }) | undefined> {
-    // Clean up expired sessions
-    await cleanupExpiredSessions();
-
-    const { data, error } = await supabase
-      .from('sessions')
-      .select('data')
-      .eq('id', id)
-      .gt('expires_at', new Date().toISOString())
-      .single();
+    const { data, error } = await supabase.storage
+      .from(BUCKET_NAME)
+      .download(`${id}.json`);
 
     if (error || !data) {
       return undefined;
     }
 
-    const sessionData = data.data as any as SessionData;
-    return sessionData as Session & { users: User[] };
+    const text = await data.text();
+    const session = JSON.parse(text) as Session & { users: User[] };
+    
+    // Check if session has expired
+    if (session.expiresAt < Date.now()) {
+      // Delete expired session
+      await supabase.storage.from(BUCKET_NAME).remove([`${id}.json`]);
+      return undefined;
+    }
+
+    return session;
   },
 
   async updateSession(session: Session & { users?: User[] }): Promise<void> {
-    const sessionData: SessionData = {
+    const sessionWithUsers = {
       ...session,
       users: session.users || [],
     };
 
-    const { error } = await supabase
-      .from('sessions')
-      .update({
-        data: sessionData as any,
-      })
-      .eq('id', session.id);
+    const { error } = await supabase.storage
+      .from(BUCKET_NAME)
+      .update(`${session.id}.json`, JSON.stringify(sessionWithUsers), {
+        contentType: 'application/json',
+        upsert: true,
+      });
 
     if (error) {
       console.error('Error updating session:', error);
